@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- ************************ 扫包 ************************ -->
+
+    <!-- 扫 Service 和 Dao 以及其它普通组件 -->
+    <context:component-scan base-package="com.seamew"/>
+
+    <!-- ************************ spring 相关配置 ************************ -->
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- ************************ 持久层相关 bean ************************ -->
+
+    <bean id="hikariDatasource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="${driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbcUrl}"/>
+        <property name="username" value="${databaseUsername}"/>
+        <property name="password" value="${password}"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="hikariDatasource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
+    </bean>
+
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.seamew.dao"/>
+    </bean>
+
+    <!-- ************************ 事务配置 ************************ -->
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="hikariDatasource"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="query*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="*"  propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="inServiceLayer" expression="within(com.seamew.service..*)"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="inServiceLayer"/>
+    </aop:config>
+
+</beans>

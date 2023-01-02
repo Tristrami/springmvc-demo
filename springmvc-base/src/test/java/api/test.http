@@ -1,0 +1,44 @@
+POST http://localhost:8080/springmvc01/userVO/save3
+Content-Type: application/x-www-form-urlencoded
+
+username=lulu&password=123
+
+###
+GET http://localhost:8080/springmvc01/userVO/get2
+school: nit
+
+###
+POST http://localhost:8080/springmvc01/userVO/array
+Content-Type: application/x-www-form-urlencoded
+
+id=1&id=2&id=3
+
+###
+GET http://localhost:8080/springmvc01/userVO/get4
+
+###
+POST http://localhost:8080/springmvc01/userVO/save4
+Content-Type: application/json
+
+{"id": 1, "username": "admin", "password": "123"}
+
+###
+POST http://localhost:8080/springmvc01/userVO/save5
+Content-Type: application/x-www-form-urlencoded
+
+id=1&username=admin&password=123&birthday=2000-11-21
+
+###
+POST http://localhost:8080/springmvc01/userVO/save7
+Content-Type: application/json
+
+{"id": 1, "username": "admin", "password": "123", "birthday": "2000/11/21"}
+
+###
+POST http://localhost:8080/springmvc01/userVO/save8
+Content-Type: application/x-www-form-urlencoded
+
+id=1&username=admin&password=123&birthday=2000-11-21&phone=123&email=123
+
+###
+GET http://localhost:8080/springmvc01/thymeleaf/hello

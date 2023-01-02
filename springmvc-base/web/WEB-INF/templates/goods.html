@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品首页</title>
+</head>
+<body>
+<!-- 使用原生 ajax 发送请求 -->
+<!--<script src="/springmvc01/js/goods01.js"></script>-->
+
+<!-- 使用 axios 发送请求 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const instance = axios.create({
+        baseUrl: "http://localhost:8080/springmvc01/",
+        // 使用 axios 发送请求 Content-Type 默认为 application/json
+        headers: {contentType: "application/json;charset=UTF-8"}
+    })
+
+    instance.get("goods")
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+    instance.get("goods/1")
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+    instance.post(
+        "goods",
+        {id: 1, name: "方便面", price: 5}
+    )
+    .then(function (response) {
+        console.log(response)
+    })
+    .catch(function (error) {
+        console.log(error)
+    })
+
+    instance.put(
+        "goods/1",
+        {id: 1, name: "方便面", price: 5}
+    )
+    .then(function (response) {
+        console.log(response)
+    })
+    .catch(function (error) {
+        console.log(error)
+    })
+
+    instance.delete("goods/1")
+    .then(function (response) {
+        console.log(response)
+    })
+    .catch(function (error) {
+        console.log(error)
+    })
+</script>
+
+<h1>商品首页</h1>
+</body>
+</html>
